@@ -152,12 +152,22 @@ def flag_outliers_iqr(df, column):
         pd.DataFrame: The DataFrame with an additional 'passed_qc' column indicating outlier status
     """
    
+    # Use IQR to identify outliers
     Q1 = df[column].quantile(0.25)
     Q3 = df[column].quantile(0.75)
     IQR = Q3 - Q1
     lower_bound = Q1 - 1.5 * IQR
     upper_bound = Q3 + 1.5 * IQR
-    df['passed_qc'] = df[column].between(lower_bound, upper_bound)
+
+    # Check if 'passed_qc' column exists, if not, create it initialized to True
+    if 'passed_qc' not in df.columns:
+        df['passed_qc'] = True
+
+     # Update 'passed_qc' 
+    is_not_outlier = df[column].between(lower_bound, upper_bound)
+    df['passed_qc'] = df['passed_qc'] & is_not_outlier
+
+    return df
     
     return df
 
