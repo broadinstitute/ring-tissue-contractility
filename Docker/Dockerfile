@@ -2,10 +2,11 @@ FROM python:3
 
 WORKDIR /app
 
+RUN mkdir -p /app/src
+
 # Install Google Cloud and required python libraries for running the analysis pipeline
 RUN apt-get update && \
-    # Install prerequisites for new repositories (apt-transport-https, gnupg)
-    # The 'libgl1' for opencv-python and scikit-image
+    # Install prerequisites 
     apt-get install -y --no-install-recommends \
         apt-transport-https \
         ca-certificates \
@@ -30,6 +31,10 @@ RUN apt-get update && \
 # Install python dependencies
 COPY ./requirements.txt /requirements.txt
 RUN pip install --no-cache-dir -r /requirements.txt
+
+COPY ./sequential_ring_tissue_script.py /app/src/sequential_ring_tissue_script.py
+COPY ./distributed_ring_tissue_script.py /app/src/distributed_ring_tissue_script.py
+
 COPY . /app
 
 ENV PYTHONPATH=$PYTHONPATH:/app

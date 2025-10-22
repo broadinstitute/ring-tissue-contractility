@@ -1,5 +1,5 @@
 #!/bin/bash
 
-docker buildx build --platform linux/amd64,linux/arm64  -f ./Dockerfile -t macielleah/ring_tissue:1.1 --push .
+docker buildx build --platform linux/amd64,linux/arm64  -f ./Dockerfile -t macielleah/ring_tissue:1.2 --push .
 
 

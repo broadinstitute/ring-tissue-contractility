@@ -1,0 +1,20 @@
+version: 1.2
+workflows:
+  - subclass: WDL
+    full-workflow-path: analyze_ring_tissue_videos
+    primaryDescriptorPath: /wdl/distributed_analysis.wdl
+    readMePath: /README.md
+    name: distributed_analysis.wdl
+    authors:
+      -  name: Leah Maciel
+         email: lmaciel@broadinstitute.org
+    topic: Distributed workflow for contractility analysis of ring tissues
+  - subclass: WDL
+    full-workflow-path: analyze_ring_tissue_videos
+    primaryDescriptorPath: /wdl/analyze_folder.wdl
+    readMePath: /README.md
+    name: analyze_folder.wdl
+    authors:
+       -  name: Leah Maciel
+          email: lmaciel@broadinstitute.org
+    topic: Sequential workflow for contractility analysis of ring tissues

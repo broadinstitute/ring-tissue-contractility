@@ -15,7 +15,7 @@ task gcloud_storage_ls {
 
   command {
     # List all files in the input directory with the specified extension
-    gcloud storage ls ~{directory_gsurl}/** | grep ~{file_extension}
+    gsutil ls ~{directory_gsurl}/**~{file_extension}
   }
   
   output {
@@ -42,7 +42,6 @@ task single_ring_tissue_analysis{
     Float diameter_um # diameter of the ring tissue in microns
     Float E # Young's modulus of the gel in kPa
     Float frame_rate # frame rate of the video in frames per second
-    String analysis_script # gcloud storage url of the script
     
     # Optional inputs
     Int? hardware_memory_GB
@@ -51,20 +50,22 @@ task single_ring_tissue_analysis{
 
   # Working location  
   String local_output_folder = "outputs"
+  String local_video_filename = basename(video_file)
   
   command <<<
       mkdir -p /app/src
-      gcloud storage cp ~{analysis_script} /app/src/single_ring_tissue_script.py
-
       mkdir ~{local_output_folder}
+
+      echo "Downloading ~{local_video_filename} from GCS..."
+      gcloud storage cp ~{video_file} ~{local_video_filename}
      
-      echo "Running analysis on ~{video_file} ========================"
+      echo "Running analysis on ~{local_video_filename} ========================"
       # Call the python function to analyze the ring tissue .nd2 file
       python -c "
       import sys
       sys.path.append('/app/src')
-      from single_ring_tissue_script import motion_analysis
-      motion_analysis(file_path='~{video_file}', output_folder='~{local_output_folder}', pixel_size_um=~{pixel_size_um}, diameter_um=~{diameter_um}, E=~{E}, frame_rate=~{frame_rate})
+      from distributed_ring_tissue_script import motion_analysis
+      motion_analysis(file_path='~{local_video_filename}', output_folder='~{local_output_folder}', pixel_size_um=~{pixel_size_um}, diameter_um=~{diameter_um}, E=~{E}, frame_rate=~{frame_rate})
       "
 
       # Upload the converted files to the output bucket
@@ -79,9 +80,9 @@ task single_ring_tissue_analysis{
   }
 
   runtime {
-    docker:"macielleah/ring_tissue:1.1"
+    docker:"macielleah/ring_tissue:1.2"
     disks: "local-disk 50 HDD"
-    memory: "${hardware_memory_GB}G"
+    memory: "~{hardware_memory_GB}G"
     cpu: 4
     maxRetries: 2
     preemptible: hardware_preemptible_tries
@@ -99,8 +100,6 @@ workflow analyze_ring_tissue_videos {
     Float diameter_um # diameter of the ring tissue in microns
     Float E # Young's modulus of the gel in kPa
     Float frame_rate # frame rate of the video in frames per second
-    String analysis_script_gsurl
-    
 
     # Optional inputs
     Int? hardware_memory_GB = 15
@@ -122,7 +121,6 @@ workflow analyze_ring_tissue_videos {
         diameter_um = diameter_um,
         E = E,
         frame_rate = frame_rate,
-        analysis_script = analysis_script_gsurl,
         hardware_memory_GB = hardware_memory_GB,
         hardware_preemptible_tries = hardware_preemptible_tries
         }
