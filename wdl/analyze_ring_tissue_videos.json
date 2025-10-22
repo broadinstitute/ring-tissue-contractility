@@ -1,0 +1,11 @@
+{
+  "analyze_ring_tissue_videos.input_directory_gsurl": "gs://your-input-bucket/path/to/nd2_folder/",
+  "analyze_ring_tissue_videos.output_bucket_gsurl": "gs://your-output-bucket/analysis_results/",
+  "analyze_ring_tissue_videos.pixel_size_um": 1.3,
+  "analyze_ring_tissue_videos.diameter_um": 315.0,
+  "analyze_ring_tissue_videos.E": 10000.0,
+  "analyze_ring_tissue_videos.frame_rate": 100.0,
+  
+  "analyze_ring_tissue_videos.hardware_memory_GB": 15,
+  "analyze_ring_tissue_videos.hardware_preemptible_tries": 1
+}
