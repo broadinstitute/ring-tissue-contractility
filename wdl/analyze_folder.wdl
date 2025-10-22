@@ -73,7 +73,7 @@ task ring_tissue_folder_analysis{
 }
 
 
-workflow analyze_ring_tissue_videos {
+workflow sequential_analyze_ring_tissue_videos {
   input {
 
     # Required inputs

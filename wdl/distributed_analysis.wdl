@@ -88,7 +88,7 @@ task single_ring_tissue_analysis{
 }
 
 
-workflow analyze_ring_tissue_videos {
+workflow distributed_analyze_ring_tissue_videos {
   input {
     # Required inputs
     String input_directory_gsurl # gcloud storage url of the input folder containing .nd2 files
