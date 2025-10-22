@@ -14,7 +14,7 @@ task ring_tissue_folder_analysis{
     String output_folder # gcloud storage url of the output bucket where the results will be saved
     Float pixel_size_um # pixel size in microns
     Float diameter_um # diameter of the ring tissue in microns
-    Float E # Young's modulus of the gel in kPa
+    Float E # Young's modulus of the gel in Pa
     Float frame_rate # frame rate of the video in frames per second
     
     # Optional inputs
@@ -64,7 +64,7 @@ task ring_tissue_folder_analysis{
   runtime {
     docker:"macielleah/ring_tissue:1.2"
     disks: "local-disk 50 HDD"
-    memory: "~{hardware_memory_GB}G"
+    memory: "${hardware_memory_GB}G"
     cpu: 4
     maxRetries: 2
     preemptible: hardware_preemptible_tries

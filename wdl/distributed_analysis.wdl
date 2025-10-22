@@ -15,7 +15,7 @@ task gcloud_storage_ls {
 
   command {
     # List all files in the input directory with the specified extension
-    gsutil ls ~{directory_gsurl}/**~{file_extension}
+    gcloud storage ls ~{directory_gsurl}/** | grep ~{file_extension}
   }
   
   output {
@@ -40,7 +40,7 @@ task single_ring_tissue_analysis{
     String output_folder # gcloud storage url of the output bucket where the results will be saved
     Float pixel_size_um # pixel size in microns
     Float diameter_um # diameter of the ring tissue in microns
-    Float E # Young's modulus of the gel in kPa
+    Float E # Young's modulus of the gel in Pa
     Float frame_rate # frame rate of the video in frames per second
     
     # Optional inputs
@@ -50,22 +50,19 @@ task single_ring_tissue_analysis{
 
   # Working location  
   String local_output_folder = "outputs"
-  String local_video_filename = basename(video_file)
   
   command <<<
       mkdir -p /app/src
       mkdir ~{local_output_folder}
 
-      echo "Downloading ~{local_video_filename} from GCS..."
-      gcloud storage cp ~{video_file} ~{local_video_filename}
      
-      echo "Running analysis on ~{local_video_filename} ========================"
+      echo "Running analysis on ~{video_file} ========================"
       # Call the python function to analyze the ring tissue .nd2 file
       python -c "
       import sys
       sys.path.append('/app/src')
       from distributed_ring_tissue_script import motion_analysis
-      motion_analysis(file_path='~{local_video_filename}', output_folder='~{local_output_folder}', pixel_size_um=~{pixel_size_um}, diameter_um=~{diameter_um}, E=~{E}, frame_rate=~{frame_rate})
+      motion_analysis(file_path='~{video_file}', output_folder='~{local_output_folder}', pixel_size_um=~{pixel_size_um}, diameter_um=~{diameter_um}, E=~{E}, frame_rate=~{frame_rate})
       "
 
       # Upload the converted files to the output bucket
@@ -82,7 +79,7 @@ task single_ring_tissue_analysis{
   runtime {
     docker:"macielleah/ring_tissue:1.2"
     disks: "local-disk 50 HDD"
-    memory: "~{hardware_memory_GB}G"
+    memory: "${hardware_memory_GB}G"
     cpu: 4
     maxRetries: 2
     preemptible: hardware_preemptible_tries
