@@ -3,7 +3,7 @@ workflows:
   - subclass: WDL
     primaryDescriptorPath: /wdl/distributed_analysis.wdl
     readMePath: /README.md
-    name: distributed_analysis.wdl
+    name: distributed_analysis
     authors:
       -  name: Leah Maciel
          email: lmaciel@broadinstitute.org
@@ -11,7 +11,7 @@ workflows:
   - subclass: WDL
     primaryDescriptorPath: /wdl/analyze_folder.wdl
     readMePath: /README.md
-    name: analyze_folder.wdl
+    name: analyze_folder
     authors:
        -  name: Leah Maciel
           email: lmaciel@broadinstitute.org
