@@ -5,7 +5,7 @@ workflows:
     testParameterFiles:
       - /wdl/distributed_analysis.json
     readMePath: /README.md
-    name: distributedAnalysis
+    name: distributed_analysis
     publish: true
     authors:
       -  name: Leah Maciel
@@ -17,7 +17,7 @@ workflows:
     testParameterFiles:
       - /wdl/analyze_ring_tissue_videos.json
     readMePath: /README.md
-    name: analyzeFolder
+    name: sequential_analysis
     publish: true
     authors:
        -  name: Leah Maciel
