@@ -1,10 +1,10 @@
-# Ring tissue python analysis
+# Cardiac ring tissue contractility analysis
 Based on the openly available MATLAB code from ```MagSeguret/MotionAnalysisRingShapedTissues```
 
 Seguret Magali, Davidson Patricia, Robben Stijn, Jouve Charlène, Pereira Céline, Cerveau Cyril, Le Berre Maël, Rodrigues Ribeiro Rita S., Hulot Jean-Sébastien (2023) A versatile high-throughput assay based on 3D ring-shaped cardiac tissues generated from human induced pluripotent stem cell derived cardiomyocytes eLife 12:RP87739, https://doi.org/10.7554/eLife.87739.1.
 
 ## Purpose
-Processes a set of .nd2 movies of ring tissues. Produces contractility measurements for each video.
+Processes a set of .nd2 movies of cardiac ring tissues and produces contractility measurements for each movie.
 This approach is a scalable, high throughput pipeline developed for analyzing contractility in 3D cardiomyocyte ring tissues. It offers advantages over traditional engineered heart tissue systems that are often costly, low throughput, and utilize proprietary software that can be difficult to use and produce inconsistent results.
 
 
@@ -13,7 +13,7 @@ The main functionality developed in our pipeline is that the code is now in pyth
 
 We have also increased the readouts and measurements saved by the pipeline, including an image of the mask, force (nN), contraction and relaxation velocity, and runtime logging. 
 
-Importantly, we have developed our pipeline to be scalable and high throughput, working entirely on Terra and Google Cloud Platform. The pipeline script can easily be run locally, however, using the distributed wdl we have developed, it is also possible to distributedly process movies directly from a Google Cloud bucket and also save the results there. We also have functions in ```Utils.py``` that can help with post processing and QC.
+Importantly, we have developed our pipeline to be scalable and high throughput, working entirely on Terra and Google Cloud Platform. The pipeline script can easily be run locally, however, using the distributed WDL we have developed, it is also possible to distributedly process movies directly from a Google Cloud bucket and also save the results there. We also have functions in ```Utils.py``` that can help with post processing and QC.
 
 
 ## How to use
@@ -36,10 +36,15 @@ To process a single movie, from ```distributed_ring_tissue_script.py``` call ```
 The only difference between these two scripts is that one is set up to process an entire folder and the other only processes one file. The outputs will be the same.
 
 ### On Terra
-1. Get a workspace set up with the necessary wdls
+1. The ```ring-tissue-analysis``` workspace has been set up on Terra with the necessary WDLs (from the DockStore and pulled from this repo)
 
-To run sequentially and entire folder, call the wdl ```analyze_folder``` and include the gsurl to the data, the output bucket, and the values for the pixel_size_um, diameter_um, E (Pa) and frame_rate.
+To run sequentially and entire folder, call the WDL ```sequential_analysis``` and include the gsurl to the data, the output bucket, and the values for the pixel_size_um, diameter_um, E (Pa) and frame_rate.
 
-To run a folder (or multiple levels of folders) distributedly, call the wdl ```distributed_analysis``` and include the gsurl to the data, the output bucket, and the values for the pixel_size_um, diameter_um, E (Pa) and frame_rate.
+To run a folder (or multiple levels of folders) distributedly, call the WDL ```distributed_analysis``` and include the gsurl to the data, the output bucket, and the values for the pixel_size_um, diameter_um, E (Pa) and frame_rate.
+
+### Calcium analysis
+Additionally, we have developed a version of the analysis pipeline to process ring tissues with calcium imaging. The ```calcium_processing_script``` is run with the same commands as above. 
+
+Along with all of the previous outputs, the ```FrameByFrameResults.csv``` also includes the column Ring_Intensity_Normalized```. For each frame this is calculated as (the frame intensity - mean intensity of the movie) / mean intensity of the movie. This column can then be used to plot the ring intensity over time.
 
 
