@@ -32,8 +32,7 @@ RUN apt-get update && \
 COPY ./requirements.txt /requirements.txt
 RUN pip install --no-cache-dir -r /requirements.txt
 
-COPY ./sequential_ring_tissue_script.py /app/src/sequential_ring_tissue_script.py
-COPY ./distributed_ring_tissue_script.py /app/src/distributed_ring_tissue_script.py
+COPY ./distributed_ring_tissue_script.py /app/src/enhanced_distributed_ring_tissue_script.py
 
 COPY . /app
 
