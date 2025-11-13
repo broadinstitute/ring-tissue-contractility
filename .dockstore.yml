@@ -23,4 +23,16 @@ workflows:
        -  name: Leah Maciel
           email: lmaciel@broadinstitute.org
     topic: Sequential workflow for contractility analysis of ring tissues
+
+  - subclass: WDL
+    primaryDescriptorPath: /wdl/enhanced_distributed_analysis.wdl
+    testParameterFiles:
+      - /wdl/distributed_analysis.json
+    readMePath: /README.md
+    name: enhanced_distributed_analysis
+    publish: true
+    authors:
+      -  name: Leah Maciel
+         email: lmaciel@broadinstitute.org
+    topic: Distributed workflow for contractility analysis of ring tissues with enhanced image processing
     
