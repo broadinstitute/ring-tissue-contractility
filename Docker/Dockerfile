@@ -31,6 +31,7 @@ RUN apt-get update && \
 # Install python dependencies
 COPY ./requirements.txt /requirements.txt
 RUN pip install --no-cache-dir -r /requirements.txt
+COPY ./enhanced_distributed_ring_tissue_script.py /app/src/enhanced_distributed_ring_tissue_script.py
 
 COPY . /app
 

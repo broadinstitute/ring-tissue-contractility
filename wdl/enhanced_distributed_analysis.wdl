@@ -50,12 +50,10 @@ task single_ring_tissue_analysis{
 
   # Working location  
   String local_output_folder = "outputs"
-  String script_path_in_repo = "../src/enhanced_distributed_ring_tissue_script.py"
   
   
   command <<<
       mkdir -p /app/src
-      cp ~{script_path_in_repo} /app/src/enhanced_distributed_ring_tissue_script.py
       mkdir ~{local_output_folder}
 
      
@@ -80,7 +78,7 @@ task single_ring_tissue_analysis{
   }
 
   runtime {
-    docker:"macielleah/ring_tissue:1.4"
+    docker:"macielleah/ring_tissue:1.5"
     disks: "local-disk 50 HDD"
     memory: "${hardware_memory_GB}G"
     cpu: 4
