@@ -50,9 +50,12 @@ task single_ring_tissue_analysis{
 
   # Working location  
   String local_output_folder = "outputs"
+  File motion_script = ".../src/enhanced_distributed_ring_tissue_script.py"
+  
   
   command <<<
       mkdir -p /app/src
+      cp ~{motion_script} /app/src/enhanced_distributed_ring_tissue_script.py
       mkdir ~{local_output_folder}
 
      
