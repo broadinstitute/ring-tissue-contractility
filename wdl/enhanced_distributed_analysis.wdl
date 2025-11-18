@@ -56,7 +56,6 @@ task single_ring_tissue_analysis{
       mkdir -p /app/src
       mkdir ~{local_output_folder}
 
-     
       echo "Running analysis on ~{video_file} ========================"
       # Call the python function to analyze the ring tissue .nd2 file
       python -c "
