@@ -77,7 +77,7 @@ task single_ring_tissue_analysis{
   }
 
   runtime {
-    docker:"macielleah/ring_tissue:1.3"
+    docker:"macielleah/ring_tissue:1.4"
     disks: "local-disk 50 HDD"
     memory: "${hardware_memory_GB}G"
     cpu: 4
