@@ -263,9 +263,6 @@ def motion_analysis(file_path, output_folder, pixel_size_um, diameter_um, E, fra
         # Apply the same preprocessing step to the current frame before thresholding
         frame_8bit = np.uint8(frame * 255)
 
-        # Enhance constrast 
-        alpha = alpha
-        beta = beta
 
         enhanced_frame = cv2.convertScaleAbs(frame_8bit, alpha=alpha, beta=beta)
 
