@@ -64,7 +64,7 @@ task single_ring_tissue_analysis{
       import sys
       sys.path.append('/app/src')
       from enhanced_distributed_ring_tissue_script import motion_analysis
-      motion_analysis(file_path='~{video_file}', output_folder='~{local_output_folder}', pixel_size_um=~{pixel_size_um}, diameter_um=~{diameter_um}, E=~{E}, frame_rate=~{frame_rate})
+      motion_analysis(file_path='~{video_file}', output_folder='~{local_output_folder}', pixel_size_um=~{pixel_size_um}, diameter_um=~{diameter_um}, E=~{E}, frame_rate=~{frame_rate}, alpha=~{alpha}, beta=~{beta})
       "
 
       # Upload the converted files to the output bucket
