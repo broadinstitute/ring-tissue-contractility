@@ -42,6 +42,8 @@ task single_ring_tissue_analysis{
     Float diameter_um # diameter of the ring tissue in microns
     Float E # Young's modulus of the gel in Pa
     Float frame_rate # frame rate of the video in frames per second
+    Float alpha # contrast enhancement factor
+    Float beta # brightness enhancement factor
     
     # Optional inputs
     Int? hardware_memory_GB
@@ -97,6 +99,8 @@ workflow distributed_analyze_ring_tissue_videos {
     Float diameter_um # diameter of the ring tissue in microns
     Float E # Young's modulus of the gel in Pa
     Float frame_rate # frame rate of the video in frames per second
+    Float alpha # contrast enhancement factor
+    Float beta # brightness enhancement factor
 
     # Optional inputs
     Int? hardware_memory_GB = 15
@@ -118,6 +122,8 @@ workflow distributed_analyze_ring_tissue_videos {
         diameter_um = diameter_um,
         E = E,
         frame_rate = frame_rate,
+        alpha = alpha,
+        beta = beta,
         hardware_memory_GB = hardware_memory_GB,
         hardware_preemptible_tries = hardware_preemptible_tries
         }

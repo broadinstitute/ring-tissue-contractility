@@ -142,7 +142,7 @@ def plot_tissue_coverage_mask(frame_data, outer_contour, bounding_circle_mask, c
     logging.info(f"Tissue coverage plot generated for frame {frame_index}.")
 
 
-def motion_analysis(file_path, output_folder, pixel_size_um, diameter_um, E, frame_rate ):
+def motion_analysis(file_path, output_folder, pixel_size_um, diameter_um, E, frame_rate, alpha, beta):
     """
     Takes in a .nd2 movies, processes it, 
     and calculates various metrics (force, stress, strain, contraction and relaxation speed, etc.)
@@ -264,8 +264,8 @@ def motion_analysis(file_path, output_folder, pixel_size_um, diameter_um, E, fra
         frame_8bit = np.uint8(frame * 255)
 
         # Enhance constrast 
-        alpha = 1.5
-        beta = -15
+        alpha = alpha
+        beta = beta
 
         enhanced_frame = cv2.convertScaleAbs(frame_8bit, alpha=alpha, beta=beta)
 
