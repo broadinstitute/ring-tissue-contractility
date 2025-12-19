@@ -248,6 +248,7 @@ def motion_analysis(file_path, output_folder, pixel_size_um, diameter_um, E, fra
     major_length_frames = np.zeros(n)
     coverage_frames = np.zeros(n)
     max_radius_frames = np.zeros(n)
+    tissue_mask_area_pixels = np.zeros(n)
 
     plot_data = {
                 'frame_data': None,
@@ -386,6 +387,7 @@ def motion_analysis(file_path, output_folder, pixel_size_um, diameter_um, E, fra
             # Create the tissue mask- area enclosed by the outermost contour (sorted_contours[1])
             tissue_mask = np.zeros_like(bw)
             cv2.drawContours(tissue_mask, [outer_tissue_contour], -1, 255, -1)
+            tissue_mask_pixels = np.sum(tissue_mask == 255)
 
             # Calculate intersection and metric
             intersection_mask = cv2.bitwise_and(tissue_mask, bounding_circle_mask)
@@ -396,11 +398,13 @@ def motion_analysis(file_path, output_folder, pixel_size_um, diameter_um, E, fra
             if total_area_pixels > 0:
                 coverage_metric = tissue_area_pixels / total_area_pixels
             else:
-                coverage_frames[i], max_radius_frames[i] = np.nan, np.nan
+                coverage_frames[i], max_radius_frames[i], tissue_mask_area_pixels[i] = np.nan, np.nan, np.nan
 
             # Store metric
             coverage_frames[i] = coverage_metric
             max_radius_frames[i] = R_max
+            tissue_mask_area_pixels[i] = tissue_mask_pixels
+            
 
             # Store plot data if this frame was selected for visualization
             if i == 0:
@@ -422,7 +426,7 @@ def motion_analysis(file_path, output_folder, pixel_size_um, diameter_um, E, fra
         # Handle case where not enough contours were found
         else:
             area_frames[i], minor_length_frames[i], major_length_frames[i] = np.nan, np.nan, np.nan
-            coverage_frames[i], max_radius_frames[i] = np.nan, np.nan
+            coverage_frames[i], max_radius_frames[i], tissue_mask_area_pixels[i] = np.nan, np.nan, np.nan
 
 
     # Store all the collected data in a DataFrame
@@ -431,7 +435,8 @@ def motion_analysis(file_path, output_folder, pixel_size_um, diameter_um, E, fra
         'area_frames': area_frames,
         'minor_length_frames': minor_length_frames,
         'major_length_frames': major_length_frames,
-        'coverage_metric': coverage_metric
+        'coverage_metric': coverage_metric,
+        'tissue_mask_area_pixels': tissue_mask_area_pixels
     })
 
     # Clean up the raw data
@@ -545,6 +550,7 @@ def motion_analysis(file_path, output_folder, pixel_size_um, diameter_um, E, fra
 
     # Area (mm^2) = Area (pixels) * (mm/pixel)^2
     area_mm2 = raw_data['filtered_area'] * (millimeter_per_pixel ** 2)
+    tissue_mask_area_mm2 = raw_data['tissue_mask_area_pixels'] * (millimeter_per_pixel ** 2)
 
     # Force (mN) = Stress (mN/mm^2) * Area (mm^2)
     force_mN = stress_mNmm2 * area_mm2
@@ -556,6 +562,7 @@ def motion_analysis(file_path, output_folder, pixel_size_um, diameter_um, E, fra
     raw_data['stress_mNmm2'] = stress_mNmm2
     raw_data['area_mm2'] = area_mm2
     raw_data['force_nN'] = force_nN
+    raw_data['tissue_mask_area_mm2'] = tissue_mask_area_mm2
 
 
     # Calculate cycle level metrics     
